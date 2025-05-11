@@ -5,19 +5,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Система управления авиакомпанией</title>
+    <title>AirSystem - Управление авиакомпанией</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            --primary-color: #FF5C93;
+            --secondary-color: #0D223F;
+            --accent-color: #00BA98;
+            --light-gray: #F5F5F5;
+            --medium-gray: #E0E0E0;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --white: #FFFFFF;
             --sidebar-width: 250px;
         }
+
         body {
             min-height: 100vh;
-            background-color: #f8f9fa;
+            background-color: var(--light-gray);
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
         }
+
+        /* Navbar Styling */
+        .navbar {
+            padding: 12px 20px;
+            background-color: var(--white) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-brand i {
+            color: var(--primary-color);
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 92, 147, 0.1);
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+            padding: 5px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .user-info:hover {
+            background-color: var(--medium-gray);
+        }
+
+        .user-role {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+
+        /* Sidebar Styling */
         .sidebar {
             width: var(--sidebar-width);
             position: fixed;
@@ -25,132 +92,210 @@
             left: 0;
             height: 100vh;
             z-index: 100;
-            padding-top: 60px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            padding-top: 70px;
+            background-color: var(--secondary-color);
             transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .sidebar-nav {
             padding-left: 0;
             list-style: none;
+            margin-top: 20px;
         }
+
         .sidebar-item {
             margin-bottom: 5px;
         }
+
         .sidebar-link {
             display: flex;
             align-items: center;
             padding: 12px 20px;
-            color: #495057;
+            color: var(--white);
             text-decoration: none;
             border-radius: 5px;
             margin: 0 8px;
             transition: all 0.3s;
         }
+
         .sidebar-link i {
             margin-right: 10px;
             font-size: 18px;
             width: 20px;
             text-align: center;
         }
+
         .sidebar-link:hover {
-            background-color: #f8f9fa;
-            color: #0d6efd;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--primary-color);
         }
+
         .sidebar-link.active {
-            background-color: #e7f1ff;
-            color: #0d6efd;
+            background-color: var(--primary-color);
+            color: var(--white);
             font-weight: 500;
         }
+
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 80px 25px 25px;
             transition: all 0.3s;
         }
-        .navbar {
-            padding: 10px 20px;
-            background-color: #fff !important;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-        .navbar-brand {
-            font-weight: 600;
-            color: #0d6efd !important;
-        }
-        .dropdown-item {
-            padding: 8px 16px;
-        }
-        .dropdown-item i {
-            margin-right: 8px;
-            width: 20px;
-            text-align: center;
-        }
-        .user-info {
-            font-weight: 500;
+
+        /* Cards, Tables and Components Styling */
+        .card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
         }
 
-        /* Responsive */
+        .card-header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 18px 20px;
+            font-weight: 600;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            border-top: none;
+            border-bottom-width: 1px;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            padding: 15px;
+            background-color: rgba(245, 245, 245, 0.5);
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 15px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        /* Buttons Styling */
+        .btn {
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #e5527f;
+            border-color: #e5527f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 92, 147, 0.3);
+        }
+
+        .btn-success {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-success:hover {
+            background-color: #00a588;
+            border-color: #00a588;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 186, 152, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--medium-gray);
+            border-color: var(--medium-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #c4c4c4;
+            border-color: #c4c4c4;
+            color: var(--text-dark);
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 0.875rem;
+            border-radius: 15px;
+        }
+
+        /* Badges Styling */
+        .badge {
+            padding: 5px 10px;
+            font-weight: 500;
+            border-radius: 10px;
+        }
+
+        .badge-primary {
+            background-color: var(--primary-color);
+        }
+
+        .badge-success {
+            background-color: var(--accent-color);
+        }
+
+        .badge-warning {
+            background-color: #FFC107;
+            color: var(--text-dark);
+        }
+
+        .badge-danger {
+            background-color: #DC3545;
+        }
+
+        /* Forms Styling */
+        .form-control {
+            border-radius: 10px;
+            padding: 10px 15px;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(255, 92, 147, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Responsive Styles */
         @media (max-width: 992px) {
             .sidebar {
                 margin-left: calc(-1 * var(--sidebar-width));
             }
+
             .main-content {
                 margin-left: 0;
             }
+
             .sidebar.show {
                 margin-left: 0;
             }
+
             .main-content.sidebar-open {
                 margin-left: var(--sidebar-width);
             }
         }
-
-        /* Cards, Tables and Components Styling */
-        .card {
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 25px;
-        }
-        .card-header {
-            background-color: #fff;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            padding: 15px 20px;
-            font-weight: 600;
-            border-radius: 10px 10px 0 0 !important;
-        }
-        .table {
-            margin-bottom: 0;
-        }
-        .table thead th {
-            border-top: none;
-            border-bottom-width: 1px;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            color: #6c757d;
-            padding: 12px 15px;
-        }
-        .table td {
-            vertical-align: middle;
-            padding: 15px;
-        }
-        .btn-sm {
-            padding: 0.4rem 0.6rem;
-            border-radius: 0.4rem;
-        }
-        .badge {
-            padding: 0.5em 0.8em;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
     </style>
-    </head>
+</head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="${pageContext.request.contextPath}/app">
-            <i class="fas fa-plane me-2"></i> Авиакомпания
+            <i class="fas fa-plane-departure me-2"></i> AirSystem
         </a>
         <button class="navbar-toggler" type="button" id="sidebarToggle">
             <span class="navbar-toggler-icon"></span>
@@ -161,12 +306,12 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle user-info" href="#" id="userDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle me-1"></i> ${user.firstName} ${user.lastName}
-                        <span class="badge bg-primary ms-2">${userRole}</span>
+                        <i class="fas fa-user-circle me-2"></i> ${user.firstName} ${user.lastName}
+                        <span class="user-role ms-2">${userRole}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/app?command=logout">
-                            <i class="fas fa-sign-out-alt"></i> Выход
+                            <i class="fas fa-sign-out-alt me-2"></i> Выход
                         </a></li>
                     </ul>
                 </li>

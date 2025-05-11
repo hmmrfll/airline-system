@@ -1,6 +1,5 @@
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Sidebar toggle functionality
@@ -15,22 +14,68 @@
             });
         }
 
-        // Tooltip and Popover initialization
+        // Tooltip initialization
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        // Datatables initialization if exists
-        if (typeof $.fn.DataTable !== 'undefined') {
-            $('.datatable').DataTable({
-                responsive: true,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Russian.json'
-                }
+        // Add animation effects to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.1)';
+                this.style.transition = 'all 0.3s ease';
             });
-        }
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.05)';
+            });
+        });
+
+        // Modal enhancements
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('show.bs.modal', function() {
+                this.style.animation = 'fadeIn 0.3s';
+            });
+        });
+
+        // Custom dropdown styling
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        dropdowns.forEach(dropdown => {
+            dropdown.style.borderRadius = '12px';
+            dropdown.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+            dropdown.style.border = 'none';
+            dropdown.style.padding = '10px 0';
+            dropdown.style.overflow = 'hidden';
+        });
+
+        // Enhance form inputs
+        const formControls = document.querySelectorAll('.form-control');
+        formControls.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transition = 'all 0.3s ease';
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
     });
+
+    // Enhanced modal functionality for delete confirmations
+    function confirmDelete(id, name, type, command) {
+        document.getElementById('deleteItemName').textContent = name;
+        document.getElementById('deleteItemType').textContent = type;
+        document.getElementById('deleteLink').href = '${pageContext.request.contextPath}/app?command=' + command + '&id=' + id;
+
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
 </script>
 </body>
 </html>
