@@ -38,7 +38,11 @@ public class AuthenticationFilter implements Filter {
         boolean isLoggedIn = session != null && session.getAttribute("user") != null;
         boolean isRegisterRequest = REGISTER_COMMAND.equals(command);
 
-        if (isLoggedIn || isLoginRequest || isLogoutRequest || isRegisterRequest) {
+        // Добавить проверку для index.jsp
+        String requestURI = httpRequest.getRequestURI();
+        boolean isIndexPage = requestURI.endsWith("index.jsp");
+
+        if (isLoggedIn || isLoginRequest || isLogoutRequest || isRegisterRequest || isIndexPage) {
             // Проверка доступа по ролям может быть добавлена здесь
             if (isLoggedIn) {
                 User user = (User) session.getAttribute("user");
@@ -46,8 +50,8 @@ public class AuthenticationFilter implements Filter {
                 logger.debug("User {} with role {} accessing command: {}",
                         user.getUsername(), role, command);
 
-                // Проверяем права доступа
-                if (!hasAccess(role, command)) {
+                // Проверяем права доступа только если указана команда
+                if (command != null && !hasAccess(role, command)) {
                     logger.warn("Access denied for user {} to command {}", user.getUsername(), command);
                     httpResponse.sendRedirect(httpRequest.getContextPath() +
                             "/app?command=login&error=access_denied");

@@ -53,8 +53,8 @@
                     <td>${flight.flightNumber}</td>
                     <td>${flight.departureAirport}</td>
                     <td>${flight.arrivalAirport}</td>
-                    <td><fmt:formatDate value="${flight.departureTime}" pattern="dd.MM.yyyy HH:mm" /></td>
-                    <td><fmt:formatDate value="${flight.arrivalTime}" pattern="dd.MM.yyyy HH:mm" /></td>
+                    <td>${flight.departureTime.format(java.time.format.DateTimeFormatter.ofPattern('dd.MM.yyyy HH:mm'))}</td>
+                    <td>${flight.arrivalTime.format(java.time.format.DateTimeFormatter.ofPattern('dd.MM.yyyy HH:mm'))}</td>
                     <td>${flight.aircraftType}</td>
                     <td>
                         <c:choose>

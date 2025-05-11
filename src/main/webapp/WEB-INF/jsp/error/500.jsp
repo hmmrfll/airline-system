@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +34,11 @@
                 <h2>500 - Внутренняя ошибка сервера</h2>
                 <div class="error-details">
                     Извините, произошла внутренняя ошибка на сервере!
+                    <c:if test="${not empty errorMessage}">
+                        <div class="alert alert-danger mt-3">
+                                ${errorMessage}
+                        </div>
+                    </c:if>
                 </div>
                 <div class="error-actions">
                     <a href="${pageContext.request.contextPath}/app" class="btn btn-primary">

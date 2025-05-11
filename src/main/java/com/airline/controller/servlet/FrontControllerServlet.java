@@ -47,19 +47,25 @@ public class FrontControllerServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String commandName = request.getParameter("command");
-        if (commandName == null || commandName.isEmpty()) {
-            commandName = "login"; // По умолчанию переходим на страницу входа
-        }
+        try {
+            String commandName = request.getParameter("command");
+            if (commandName == null || commandName.isEmpty()) {
+                commandName = "login"; // По умолчанию переходим на страницу входа
+            }
 
-        logger.debug("Processing command: {}", commandName);
+            logger.debug("Processing command: {}", commandName);
 
-        Command command = CommandFactory.getInstance().getCommand(commandName);
-        String page = command.execute(request, response);
+            Command command = CommandFactory.getInstance().getCommand(commandName);
+            String page = command.execute(request, response);
 
-        if (page != null) {
-            logger.debug("Forwarding to page: {}", page);
-            request.getRequestDispatcher(page).forward(request, response);
+            if (page != null) {
+                logger.debug("Forwarding to page: {}", page);
+                request.getRequestDispatcher(page).forward(request, response);
+            }
+        } catch (Exception e) {
+            logger.error("Error processing request: {}", e.getMessage(), e);
+            request.setAttribute("errorMessage", "Произошла ошибка при обработке запроса: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/jsp/error/500.jsp").forward(request, response);
         }
     }
 }

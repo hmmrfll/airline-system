@@ -23,6 +23,7 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin: 0 auto; /* Добавить это */
         }
         .logo {
             text-align: center;
@@ -99,6 +100,10 @@
             <button type="submit" class="btn btn-login btn-primary w-100 mb-3">
                 <i class="fas fa-sign-in-alt me-2"></i> Войти
             </button>
+
+            <div class="text-center mt-3">
+                <p>Нет аккаунта? <a href="${pageContext.request.contextPath}/app?command=register">Зарегистрироваться</a></p>
+            </div>
         </form>
     </div>
 </div>

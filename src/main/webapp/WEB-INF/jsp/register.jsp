@@ -23,6 +23,7 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin: 0 auto; /* Добавить это */
         }
         .logo {
             text-align: center;

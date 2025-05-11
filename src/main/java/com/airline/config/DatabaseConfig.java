@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DatabaseConfig {
@@ -51,5 +54,15 @@ public class DatabaseConfig {
 
     public int getPoolSize() {
         return Integer.parseInt(getProperty("db.pool.size"));
+    }
+
+    public boolean testConnection() {
+        try (Connection connection = DriverManager.getConnection(
+                getUrl(), getUsername(), getPassword())) {
+            return connection.isValid(1);
+        } catch (SQLException e) {
+            logger.error("Database connection test failed", e);
+            return false;
+        }
     }
 }
