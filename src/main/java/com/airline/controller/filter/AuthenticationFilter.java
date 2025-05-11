@@ -17,6 +17,7 @@ public class AuthenticationFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(AuthenticationFilter.class);
     private static final String LOGIN_COMMAND = "login";
     private static final String LOGOUT_COMMAND = "logout";
+    private static final String REGISTER_COMMAND = "register";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -35,8 +36,9 @@ public class AuthenticationFilter implements Filter {
         boolean isLoginRequest = LOGIN_COMMAND.equals(command);
         boolean isLogoutRequest = LOGOUT_COMMAND.equals(command);
         boolean isLoggedIn = session != null && session.getAttribute("user") != null;
+        boolean isRegisterRequest = REGISTER_COMMAND.equals(command);
 
-        if (isLoggedIn || isLoginRequest || isLogoutRequest) {
+        if (isLoggedIn || isLoginRequest || isLogoutRequest || isRegisterRequest) {
             // Проверка доступа по ролям может быть добавлена здесь
             if (isLoggedIn) {
                 User user = (User) session.getAttribute("user");

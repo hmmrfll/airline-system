@@ -1,102 +1,206 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Система Авиакомпания</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <title>Система управления авиакомпанией</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 48px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        :root {
+            --sidebar-width: 250px;
+        }
+        body {
+            min-height: 100vh;
             background-color: #f8f9fa;
         }
-        .sidebar-sticky {
-            position: relative;
+        .sidebar {
+            width: var(--sidebar-width);
+            position: fixed;
             top: 0;
-            height: calc(100vh - 48px);
-            padding-top: .5rem;
-            overflow-x: hidden;
-            overflow-y: auto;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+            padding-top: 60px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: all 0.3s;
         }
-        .nav-link {
+        .sidebar-nav {
+            padding-left: 0;
+            list-style: none;
+        }
+        .sidebar-item {
+            margin-bottom: 5px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 8px;
+            transition: all 0.3s;
+        }
+        .sidebar-link i {
+            margin-right: 10px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar-link:hover {
+            background-color: #f8f9fa;
+            color: #0d6efd;
+        }
+        .sidebar-link.active {
+            background-color: #e7f1ff;
+            color: #0d6efd;
             font-weight: 500;
-            color: #333;
-        }
-        .nav-link.active {
-            color: #007bff;
         }
         .main-content {
-            margin-left: 220px;
-            padding: 20px;
+            margin-left: var(--sidebar-width);
+            padding: 80px 25px 25px;
+            transition: all 0.3s;
         }
         .navbar {
-            padding: 0.5rem 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            background-color: #fff !important;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 600;
+            color: #0d6efd !important;
+        }
+        .dropdown-item {
+            padding: 8px 16px;
+        }
+        .dropdown-item i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        .user-info {
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                margin-left: calc(-1 * var(--sidebar-width));
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.show {
+                margin-left: 0;
+            }
+            .main-content.sidebar-open {
+                margin-left: var(--sidebar-width);
+            }
+        }
+
+        /* Cards, Tables and Components Styling */
+        .card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
+            font-weight: 600;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            border-top: none;
+            border-bottom-width: 1px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: #6c757d;
+            padding: 12px 15px;
+        }
+        .table td {
+            vertical-align: middle;
+            padding: 15px;
+        }
+        .btn-sm {
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.4rem;
+        }
+        .badge {
+            padding: 0.5em 0.8em;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="${pageContext.request.contextPath}/app">Авиакомпания</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="${pageContext.request.contextPath}/app">
+            <i class="fas fa-plane me-2"></i> Авиакомпания
+        </a>
+        <button class="navbar-toggler" type="button" id="sidebarToggle">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ${user.firstName} ${user.lastName} (${userRole})
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/app?command=logout">
-                        <i class="fas fa-sign-out-alt"></i> Выход
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle user-info" href="#" id="userDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i> ${user.firstName} ${user.lastName}
+                        <span class="badge bg-primary ms-2">${userRole}</span>
                     </a>
-                </div>
-            </li>
-        </ul>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/app?command=logout">
+                            <i class="fas fa-sign-out-alt"></i> Выход
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block sidebar">
-            <div class="sidebar-sticky">
-                <ul class="nav flex-column">
-                    <c:if test="${userRole eq 'ADMIN'}">
-                        <li class="nav-item">
-                            <a class="nav-link ${param.active eq 'flights' ? 'active' : ''}"
-                               href="${pageContext.request.contextPath}/app?command=flightList">
-                                <i class="fas fa-plane"></i> Рейсы
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link ${param.active eq 'employees' ? 'active' : ''}"
-                               href="${pageContext.request.contextPath}/app?command=employeeList">
-                                <i class="fas fa-users"></i> Сотрудники
-                            </a>
-                        </li>
-                    </c:if>
-                    <c:if test="${userRole eq 'DISPATCHER' or userRole eq 'ADMIN'}">
-                        <li class="nav-item">
-                            <a class="nav-link ${param.active eq 'crews' ? 'active' : ''}"
-                               href="${pageContext.request.contextPath}/app?command=crewList">
-                                <i class="fas fa-user-friends"></i> Бригады
-                            </a>
-                        </li>
-                    </c:if>
-                </ul>
-            </div>
-        </nav>
+<div class="sidebar" id="sidebar">
+    <ul class="sidebar-nav">
+        <c:if test="${userRole eq 'ADMIN'}">
+            <li class="sidebar-item">
+                <a class="sidebar-link ${param.active eq 'flights' ? 'active' : ''}"
+                   href="${pageContext.request.contextPath}/app?command=flightList">
+                    <i class="fas fa-plane"></i>
+                    <span>Рейсы</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link ${param.active eq 'employees' ? 'active' : ''}"
+                   href="${pageContext.request.contextPath}/app?command=employeeList">
+                    <i class="fas fa-users"></i>
+                    <span>Сотрудники</span>
+                </a>
+            </li>
+        </c:if>
+        <c:if test="${userRole eq 'DISPATCHER' or userRole eq 'ADMIN'}">
+            <li class="sidebar-item">
+                <a class="sidebar-link ${param.active eq 'crews' ? 'active' : ''}"
+                   href="${pageContext.request.contextPath}/app?command=crewList">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Бригады</span>
+                </a>
+            </li>
+        </c:if>
+    </ul>
+</div>
 
-        <main role="main" class="main-content">
+<main class="main-content" id="mainContent">

@@ -23,6 +23,8 @@ public class CommandFactory {
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
 
+        commands.put("register", new RegisterCommand());
+
         // Flight commands
         commands.put("flightList", new FlightListCommand());
         commands.put("flightCreate", new FlightCreateCommand());
