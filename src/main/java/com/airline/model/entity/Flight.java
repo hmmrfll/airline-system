@@ -1,6 +1,7 @@
 package com.airline.model.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Flight {
     private Long id;
@@ -172,5 +173,15 @@ public class Flight {
                 ", createdBy=" + createdBy +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public String getFormattedDepartureTime() {
+        if (departureTime == null) return "";
+        return departureTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+    }
+
+    public String getFormattedArrivalTime() {
+        if (arrivalTime == null) return "";
+        return arrivalTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 }

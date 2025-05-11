@@ -1,6 +1,7 @@
 package com.airline.model.entity;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Employee {
     private Long id;
@@ -176,5 +177,10 @@ public class Employee {
                 ", contactInfo='" + contactInfo + '\'' +
                 ", active=" + active +
                 '}';
+    }
+
+    public String getFormattedHireDate() {
+        if (hireDate == null) return "";
+        return hireDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 }

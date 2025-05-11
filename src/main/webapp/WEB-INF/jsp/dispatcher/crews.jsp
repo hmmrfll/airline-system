@@ -72,7 +72,7 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td><fmt:formatDate value="${crew.createdAt}" pattern="dd.MM.yyyy HH:mm" /></td>
+                    <td>${crew.formattedCreatedAt}</td>
                     <td>
                         <div class="btn-group" role="group">
                             <a href="${pageContext.request.contextPath}/app?command=crewEdit&id=${crew.id}"

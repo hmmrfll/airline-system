@@ -72,7 +72,7 @@
                     <label for="hireDate" class="col-sm-3 col-form-label">Дата найма</label>
                     <div class="col-sm-9">
                         <input type="date" class="form-control" id="hireDate" name="hireDate"
-                               value="<fmt:formatDate value="${employee.hireDate}" pattern="yyyy-MM-dd"/>">
+                               value="${employee.hireDate != null ? employee.hireDate : ''}">
                     </div>
                 </div>
 

@@ -59,7 +59,7 @@
                     <label for="departureTime" class="col-sm-3 col-form-label">Время вылета *</label>
                     <div class="col-sm-9">
                         <input type="datetime-local" class="form-control" id="departureTime" name="departureTime"
-                               value="<fmt:formatDate value="${flight.departureTime}" pattern="yyyy-MM-dd'T'HH:mm"/>" required>
+                               value="${flight.departureTime != null ? flight.departureTime.toString().substring(0, 16) : ''}" required>
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                     <label for="arrivalTime" class="col-sm-3 col-form-label">Время прилета *</label>
                     <div class="col-sm-9">
                         <input type="datetime-local" class="form-control" id="arrivalTime" name="arrivalTime"
-                               value="<fmt:formatDate value="${flight.arrivalTime}" pattern="yyyy-MM-dd'T'HH:mm"/>" required>
+                               value="${flight.arrivalTime != null ? flight.arrivalTime.toString().substring(0, 16) : ''}" required>
                     </div>
                 </div>
 

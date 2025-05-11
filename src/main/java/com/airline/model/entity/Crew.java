@@ -1,6 +1,7 @@
 package com.airline.model.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,5 +125,12 @@ public class Crew {
                 ", createdAt=" + createdAt +
                 ", members=" + members +
                 '}';
+    }
+
+    public String getFormattedCreatedAt() {
+        if (createdAt == null) {
+            return "";
+        }
+        return createdAt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 }

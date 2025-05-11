@@ -48,7 +48,7 @@
                     <td>${employee.id}</td>
                     <td>${employee.lastName} ${employee.firstName} ${employee.middleName}</td>
                     <td>${employee.position.name}</td>
-                    <td><fmt:formatDate value="${employee.hireDate}" pattern="dd.MM.yyyy" /></td>
+                    <td>${employee.formattedHireDate}</td>
                     <td>${employee.experience}</td>
                     <td>${employee.passport}</td>
                     <td>${employee.contactInfo}</td>
