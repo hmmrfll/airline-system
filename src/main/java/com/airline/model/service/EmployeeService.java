@@ -63,4 +63,15 @@ public class EmployeeService {
 
         return isNameValid && isPositionValid;
     }
+
+    // Дополнение к EmployeeService.java
+    public List<EmployeePosition> getAllPositions() {
+        logger.info("Finding all employee positions");
+        return employeeDao.getAllPositions();
+    }
+
+    public Optional<EmployeePosition> getPositionById(Long id) {
+        logger.info("Finding position by id: {}", id);
+        return employeeDao.getPositionById(id);
+    }
 }

@@ -241,4 +241,55 @@ public class EmployeeDao implements GenericDao<Employee, Long> {
                 .withActive(resultSet.getBoolean("active"))
                 .build();
     }
+
+    // Дополнение к EmployeeDao.java
+    private static final String FIND_ALL_POSITIONS =
+            "SELECT * FROM employee_positions";
+    private static final String FIND_POSITION_BY_ID =
+            "SELECT * FROM employee_positions WHERE id = ?";
+
+    public List<EmployeePosition> getAllPositions() {
+        List<EmployeePosition> positions = new ArrayList<>();
+        Connection connection = connectionPool.getConnection();
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(FIND_ALL_POSITIONS)) {
+
+            while (resultSet.next()) {
+                positions.add(mapResultSetToPosition(resultSet));
+            }
+            return positions;
+        } catch (SQLException e) {
+            logger.error("Error finding all positions", e);
+            return positions;
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
+
+    public Optional<EmployeePosition> getPositionById(Long id) {
+        Connection connection = connectionPool.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(FIND_POSITION_BY_ID)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(mapResultSetToPosition(resultSet));
+                }
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            logger.error("Error finding position by id: {}", id, e);
+            return Optional.empty();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
+
+    private EmployeePosition mapResultSetToPosition(ResultSet resultSet) throws SQLException {
+        return new EmployeePosition(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getString("description")
+        );
+    }
+
 }
