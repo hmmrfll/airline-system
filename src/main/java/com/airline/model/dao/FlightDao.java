@@ -151,17 +151,40 @@ public class FlightDao implements GenericDao<Flight, Long> {
         }
     }
 
-    @Override
     public boolean delete(Long id) {
         Connection connection = connectionPool.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
-            statement.setLong(1, id);
-            int affectedRows = statement.executeUpdate();
-            return affectedRows > 0;
+        try {
+            connection.setAutoCommit(false); // Начало транзакции
+
+            // Сначала обнуляем ссылки в бригадах
+            try (PreparedStatement updateCrews = connection.prepareStatement(
+                    "UPDATE crews SET flight_id = NULL WHERE flight_id = ?")) {
+                updateCrews.setLong(1, id);
+                updateCrews.executeUpdate();
+            }
+
+            // Затем удаляем сам рейс
+            try (PreparedStatement deleteFlight = connection.prepareStatement(DELETE)) {
+                deleteFlight.setLong(1, id);
+                int affectedRows = deleteFlight.executeUpdate();
+
+                connection.commit(); // Фиксируем транзакцию
+                return affectedRows > 0;
+            }
         } catch (SQLException e) {
+            try {
+                connection.rollback(); // Откат при ошибке
+            } catch (SQLException ex) {
+                logger.error("Error rolling back transaction", ex);
+            }
             logger.error("Error deleting flight with id: {}", id, e);
             return false;
         } finally {
+            try {
+                connection.setAutoCommit(true); // Восстанавливаем автокоммит
+            } catch (SQLException e) {
+                logger.error("Error resetting auto-commit", e);
+            }
             connectionPool.releaseConnection(connection);
         }
     }
